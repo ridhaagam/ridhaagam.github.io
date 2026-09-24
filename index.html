@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Portfolio">
+<link rel="apple-touch-icon" href="assets/favicon.svg">
+<title>Portfolio · Muhammad Ridha Agam</title>
+<meta name="description" content="Muhammad Ridha Agam: vision researcher and backend engineer. An interactive 3D desk with papers, awards, projects and a blog.">
+<meta property="og:title" content="Portfolio · Muhammad Ridha Agam">
+<meta property="og:description" content="An interactive 3D desk with papers, awards, projects and a blog.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#F0CDB2">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&amp;family=Fredoka:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=Nunito:wght@400;600;700&amp;family=Pixelify+Sans:wght@500&amp;family=Silkscreen&amp;display=swap">
+<style>
+body{margin:0;background:#F0CDB2}
+.root{--ink:#2B2A33;--ink2:#55505C;--ink3:#6E6873;--paper:#FFF9EF;--line:#EADFCF;--red:#D9594C;--blue:#3D55B8;--sage:#9DBB8C;position:relative;overflow:hidden;background:#F0CDB2;color:var(--ink);font:15px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+.root *,.root *::before,.root *::after{box-sizing:border-box}
+.fr{font-family:"Fredoka","IBM Plex Sans",sans-serif}
+.hand{font-family:"Caveat",cursive}
+.mono{font-family:"IBM Plex Mono",monospace}
+a{color:var(--blue)}
+.scene{position:absolute;inset:0;touch-action:none}
+.scene canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 55%,rgba(70,35,20,.28) 100%)}
+.tip{position:absolute;left:0;top:0;pointer-events:none;opacity:0;padding:6px 12px;border-radius:999px;background:#2B2A33;color:#FFF6EA;font:500 14px "Fredoka",sans-serif;white-space:nowrap;transition:opacity .15s;z-index:5}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border:2.5px solid #2B2A33;border-radius:999px;background:#FFF9EF;color:#2B2A33;font:600 15px "Fredoka",sans-serif;text-decoration:none;cursor:pointer;box-shadow:3px 3px 0 #2B2A33;transition:transform .12s ease,box-shadow .12s ease,background .15s}
+.btn:hover{background:#F7E3B2;color:#2B2A33;transform:translate(-1px,-1px);box-shadow:4px 4px 0 #2B2A33}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #2B2A33}
+.btn.dark{background:#2B2A33;color:#FFF6EA}
+.btn.dark:hover{background:#3A3844;color:#FFF6EA}
+.btn.ico{width:44px;padding:0}
+.chip{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:2.5px solid #2B2A33;border-radius:999px;background:#FFFFFF;color:#2B2A33;font:600 15px "Fredoka",sans-serif;cursor:pointer;box-shadow:3px 3px 0 #2B2A33;transition:transform .12s ease,box-shadow .12s ease,background .15s}
+.chip:hover{background:#F7E3B2;transform:translate(-1px,-1px);box-shadow:4px 4px 0 #2B2A33}
+.chip:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #2B2A33}
+.switch{display:inline-flex;align-items:center;gap:12px;min-height:44px;padding:4px 16px 4px 4px;border:2.5px solid #2B2A33;border-radius:999px;background:#FFF9EF;color:#2B2A33;font:600 15px "Fredoka",sans-serif;cursor:pointer;box-shadow:3px 3px 0 #2B2A33}
+.switch:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #2B2A33}
+.sw-track{position:relative;display:block;width:88px;height:40px;border:2.5px solid #2B2A33;border-radius:999px;background:#F7E3B2;transition:background .35s ease}
+.switch.night .sw-track{background:#3D55B8}
+.sw-knob{position:absolute;left:2px;top:2px;width:31px;height:31px;display:grid;place-items:center;border:2.5px solid #2B2A33;border-radius:50%;background:#FFFFFF;transition:transform .45s cubic-bezier(.3,1.4,.5,1)}
+.switch.night .sw-knob{transform:translateX(47px)}
+.sw-knob svg{position:absolute;transition:opacity .25s}
+.k-moon{opacity:0}
+.switch.night .k-moon{opacity:1}
+.switch.night .k-sun{opacity:0}
+.sw-bg{position:absolute;top:50%;margin-top:-8px;transition:opacity .3s}
+.switch.night .sw-bg.sun{opacity:0}
+.switch .sw-bg.stars{opacity:0}
+.switch.night .sw-bg.stars{opacity:1}
+.ic{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.panel{position:absolute;right:28px;top:28px;bottom:28px;width:470px;z-index:4;display:flex;flex-direction:column;border-radius:22px;background:var(--paper);box-shadow:0 24px 60px rgba(70,35,20,.28),0 0 0 2px #2B2A33;animation:slide .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes slide{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+.tape{position:absolute;top:-12px;left:50%;width:120px;height:26px;margin-left:-60px;background:rgba(247,227,178,.9);transform:rotate(-3deg)}
+.pbody{flex-grow:1;overflow:auto;padding:8px 32px 32px}
+.eyebrow{font:500 12px "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.h2{margin:6px 0 0;font:700 32px/1.1 "Fredoka",sans-serif}
+.item{padding:16px 0;border-top:1.5px dashed #E0D3BF}
+.pill{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:999px;font:500 12px "IBM Plex Mono",monospace;white-space:nowrap}
+.p-gold{background:#FBEBC4;color:#7A5206}
+.p-blue{background:#E3E8FA;color:#2F46A3}
+.p-sage{background:#E4EEDD;color:#3B5C2F}
+.met{display:inline-flex;flex-direction:column;padding:8px 12px;border-radius:12px;background:#F6EDDD}
+.ld{position:absolute;inset:0;z-index:10;display:grid;place-items:center;background:#F0CDB2}
+.bar{width:220px;height:10px;border-radius:999px;background:#E3B596;overflow:hidden}
+.bar span{display:block;height:100%;width:40%;background:#2B2A33;border-radius:999px;animation:load 1.1s ease-in-out infinite}
+@keyframes load{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.toon{background:#FFF9EF;border:3px solid #2B2A33;border-radius:22px;box-shadow:6px 6px 0 #2B2A33}
+.stk{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border:2.5px solid #2B2A33;border-radius:999px;font:600 14px "Fredoka",sans-serif;color:#2B2A33;white-space:nowrap}
+.s-red{background:#F7B5A8}.s-blue{background:#C7D2F5}.s-sage{background:#CFE3C3}.s-butter{background:#F7E3B2}.s-white{background:#FFFFFF}
+.pcard{display:flex;flex-direction:column;text-align:left;padding:0;overflow:hidden;cursor:pointer;color:#2B2A33;text-decoration:none;font-family:"Nunito",sans-serif;transition:transform .2s ease,box-shadow .2s ease}
+.pcard:hover{transform:translate(-3px,-5px) rotate(0deg)!important;box-shadow:10px 11px 0 #2B2A33;color:#2B2A33}
+.cover{display:block;border-bottom:3px solid #2B2A33;background:#F7E3B2}
+.ln{fill:none;stroke:#2B2A33;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.lf{stroke:#2B2A33;stroke-width:3;stroke-linejoin:round}
+.lt{stroke:#2B2A33;stroke-width:2;stroke-linejoin:round}
+.hnd{font:700 24px "Caveat",cursive;fill:#2B2A33}
+.lbl{font:700 16px "Fredoka",sans-serif;fill:#2B2A33}
+.art p{font:17px/1.75 "Nunito",sans-serif;color:#45404D;margin:0 0 18px}
+.art h2{font:700 26px/1.2 "Fredoka",sans-serif;margin:34px 0 14px;display:inline-block;padding:0 4px;background:linear-gradient(transparent 58%,#F7E3B2 58%)}
+.drop::first-letter{float:left;font:700 66px/0.85 "Fredoka",sans-serif;margin:6px 10px 0 0;color:#E0574B}
+.bubble{position:relative;background:#FFFFFF;border:3px solid #2B2A33;border-radius:22px;padding:14px 18px;font:700 24px/1.15 "Caveat",cursive;color:#2B2A33}
+.bubble::after{content:"";position:absolute;left:34px;bottom:-15px;width:22px;height:22px;background:#FFFFFF;border-right:3px solid #2B2A33;border-bottom:3px solid #2B2A33;transform:rotate(45deg)}
+.stat{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border:3px solid #2B2A33;border-radius:18px;box-shadow:4px 4px 0 #2B2A33}
+.todo{border:2.5px dashed #B9AE9C;border-radius:16px;padding:14px 18px;color:#6E6873;background:#FFFDF8;font:16px/1.6 "Nunito",sans-serif}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 12px;text-align:center;border:3px solid #2B2A33;border-radius:18px;box-shadow:4px 4px 0 #2B2A33;font:600 15px/1.3 "Fredoka",sans-serif;flex:1 1 0}
+.cbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border:2.5px solid #2B2A33;border-radius:999px;background:#FFF9EF;color:#2B2A33;font:600 15px "Fredoka",sans-serif;text-decoration:none;cursor:pointer;box-shadow:3px 3px 0 #2B2A33}
+.cbtn:hover{background:#FFFFFF;color:#2B2A33}
+.cbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #2B2A33}
+.cbtn.ink{background:#2B2A33;color:#FFF6EA}
+.cbtn.ink:hover{background:#3A3844;color:#FFF6EA}
+.mwrap{position:absolute;inset:0;z-index:6;display:grid;place-items:center;background:rgba(43,42,51,.38)}
+.modal{position:relative;width:1080px;height:800px;max-width:calc(100% - 24px);max-height:calc(100% - 24px);display:flex;flex-direction:column;box-shadow:10px 10px 0 #2B2A33;animation:pop .45s cubic-bezier(.2,1.2,.3,1)}
+@keyframes pop{from{transform:scale(.92) rotate(-1deg);opacity:0}to{transform:none;opacity:1}}
+.lead{font-size:19px!important;color:#2B2A33!important}
+.pipe{display:flex;align-items:stretch;gap:10px;margin:6px 0 22px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:4px 0 22px}
+.author{display:flex;gap:16px;align-items:center;margin-top:30px;padding:18px 20px;box-shadow:4px 4px 0 #2B2A33}
+.avatar{flex-shrink:0;width:64px;height:64px;border-radius:50%;border:3px solid #2B2A33;background:#F7E3B2;display:grid;place-items:center;font:700 20px "Fredoka",sans-serif}
+.mhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:26px 30px 18px}
+.mlistwrap{flex-grow:1;min-height:0;padding:8px 32px 30px;display:flex;flex-direction:column;gap:22px;overflow:auto}
+.mlist{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;flex-grow:1}
+.mpost{flex-grow:1;min-height:0;height:100%;display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px;padding:4px 30px 28px}
+.mside{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.mart{min-height:0;overflow:auto;padding-right:14px}
+.mtape{position:absolute;top:-14px;width:110px;height:28px;background:rgba(247,227,178,.95);border:2px solid rgba(43,42,51,.15)}
+@media (prefers-reduced-motion: reduce){.panel,.bar span,.modal{animation:none}.pcard,.btn,.chip,.sw-knob,.sw-track{transition:none}}
+</style>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#F0CDB2;-webkit-text-size-adjust:100%;overscroll-behavior:none}
+button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.chipbar{padding-bottom:max(22px, env(safe-area-inset-bottom))!important;padding-left:max(28px, env(safe-area-inset-left))!important}
+.pbody,.mart,.mlistwrap,.mpost{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.dc-if{display:contents}
+.dc-if[hidden]{display:none!important}
+@media (max-width: 520px){ .mhead a.btn{display:none} }
+@media (max-height: 520px) and (orientation: landscape){
+  .panel{top:10px!important;bottom:10px!important;right:10px!important;width:min(460px, 58vw)!important}
+  .chipbar{padding-top:2px!important;padding-bottom:max(10px, env(safe-area-inset-bottom))!important}
+  .chipbar .chip{min-height:40px}
+  .jumpl{display:none}
+  .modal{width:96vw!important;height:92vh!important;height:92dvh!important}
+  .mlist{grid-template-columns:repeat(3,minmax(220px,1fr))!important;overflow-x:auto}
+  .mpost{grid-template-columns:200px minmax(0,1fr)!important}
+  .mside .bubble{display:none}
+}
+@media (max-width: 900px) and (min-height: 521px){
+  .panel{left:10px!important;right:10px!important;top:auto!important;bottom:10px!important;width:auto!important;height:64vh!important}
+  .pbody{padding:6px 20px 24px!important}
+  .chipbar{overflow-x:auto;flex-wrap:nowrap;padding:4px 14px 16px!important;scrollbar-width:none}
+  .chipbar::-webkit-scrollbar{display:none}
+  .chipbar .chip{flex-shrink:0}
+  .jumpl{display:none}
+  .modal{width:94vw!important;height:90vh!important;height:90dvh!important}
+  .mhead{padding:18px 18px 10px!important}
+  .mhead .mtag{display:none}
+  .mhead span[style*='40px']{font-size:30px!important}
+  .mlistwrap{padding:6px 16px 20px!important}
+  .mlist{grid-template-columns:minmax(0,1fr)!important}
+  .mpost{grid-template-columns:minmax(0,1fr)!important;padding:4px 16px 16px!important;overflow:auto}
+  .mside{flex-direction:row!important;flex-wrap:wrap;align-items:center!important}
+  .mside .bubble,.mside .toon{display:none}
+  .mart{overflow:visible!important;padding-right:0!important}
+  .pipe{flex-direction:column}.pipe>svg{transform:rotate(90deg)}
+  .stats{grid-template-columns:minmax(0,1fr)!important}
+}
+</style>
+<script src="assets/three.min.js" defer></script>
+<script src="assets/desk-scene.js" defer></script>
+<script src="assets/dc-lite.js"></script>
+</head>
+<body>
+<div class="root" style="width: 100vw; height: 100vh; height: 100dvh">
+
+<div class="scene" data-ref="refs.wrap">
+<canvas data-ref="refs.canvas" aria-label="A 3D desk. Each object opens part of the portfolio."></canvas>
+<div class="tip" data-ref="refs.tip"></div>
+</div>
+<div class="vig"></div>
+
+<!-- back to desk -->
+<div style="position: absolute; left: 28px; top: 28px; z-index: 3; display: flex; flex-direction: column; gap: 12px; align-items: flex-start">
+<div class="dc-if" data-if="away" hidden>
+<button class="btn" type="button" data-on-click="goHome"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>Back to desk</button>
+</div>
+</div>
+
+<!-- top right -->
+<div class="dc-if" data-if="noPanel" hidden>
+<div style="position: absolute; right: 28px; top: 28px; z-index: 3; display: flex; gap: 10px">
+<button  type="button" role="switch"  aria-label="Night mode" data-on-click="toggleNight" data-t='{"class": "{{switchCls}}", "aria-checked": "{{nightStr}}"}'>
+<span class="sw-track">
+<svg class="sw-bg sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="right: 10px"><circle cx="12" cy="12" r="5" fill="#F2B544" stroke="#2B2A33" stroke-width="2"></circle></svg>
+<svg class="sw-bg stars" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="left: 12px"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#FFF6EA"></path></svg>
+<span class="sw-knob">
+<svg class="k-sun ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style="color: #D98E1E"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+<svg class="k-moon ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style="color: #3D55B8"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg>
+</span>
+</span>
+<span style="min-width: 44px; text-align: left"><span data-text="nightLabel"></span></span>
+</button>
+</div>
+</div>
+
+<!-- bottom: explore -->
+<div class="dc-if" data-if="atDesk" hidden>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; pointer-events: none">
+<svg viewBox="0 0 1440 40" width="100%" height="40" preserveAspectRatio="none" aria-hidden="true" style="display: block"><path d="M0 40 L0 18 L40 22 L80 12 L130 20 L170 10 L220 19 L260 14 L310 24 L350 13 L400 21 L450 11 L490 19 L540 15 L590 25 L630 12 L680 20 L720 14 L770 23 L810 11 L860 19 L900 15 L950 24 L990 12 L1040 20 L1080 13 L1130 22 L1170 11 L1220 18 L1260 14 L1310 23 L1350 12 L1400 20 L1440 15 L1440 40 Z" fill="#FFF9EF"></path></svg>
+<div class="chipbar" style="background: #FFF9EF; padding: 4px 28px 22px; display: flex; align-items: center; gap: 10px; pointer-events: auto">
+<span class="hand jumpl" style="font-size: 26px; margin-right: 6px">click anything on the desk, or jump to:</span>
+<template data-for="spots" data-as="s">
+<button class="chip" type="button" data-on-click="s.go"><span data-text="s.label"></span></button>
+</template>
+</div>
+</div>
+</div>
+
+<!-- inside the computer -->
+<div class="dc-if" data-if="isScreen" hidden>
+<div style="position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 3; display: flex; align-items: center; gap: 14px; padding: 12px 12px 12px 24px; border-radius: 999px; background: #FFF9EF; box-shadow: 0 0 0 2px #2B2A33, 0 12px 30px rgba(0,0,0,.25)">
+<span class="fr" style="font-size: 16px">You're inside the computer. Pick a folder on the screen.</span>
+<button class="btn dark" type="button" data-on-click="goHome">Back to desk</button>
+</div>
+</div>
+
+<!-- content panel -->
+<div class="dc-if" data-if="hasPanel" hidden>
+<aside class="panel" data-t='{"aria-label": "{{panelLabel}}"}'>
+<span class="tape"></span>
+<div style="display: flex; justify-content: flex-end; padding: 16px 16px 0">
+<button class="btn ico" type="button" data-on-click="goHome" aria-label="Close and go back to the desk"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+<div class="pbody">
+
+<div class="dc-if" data-if="is.about" hidden>
+<span class="eyebrow">About</span>
+<h2 class="h2">Hi, I'm Muhammad Ridha Agam <span style="font-size: 20px; color: var(--ink3)">阿杠</span></h2>
+<p style="margin: 14px 0 0; color: var(--ink2)">I work on two things that fit together well. In the lab I build efficient vision models, mostly diffusion and state-space networks for counting, segmentation and faces, with an eye on running them on small devices. At work I keep camera and parking systems running across sites in Indonesia.</p>
+<div class="item" style="margin-top: 18px"><div class="eyebrow">Now</div><div style="font-weight: 600">M.S., Electrical Engineering · National Formosa University</div><div style="color: var(--ink3)">Yunlin, Taiwan · 2025 – now · Advisor: Prof. Hui-Kai Su</div></div>
+<div class="item"><div class="eyebrow">Also</div><div style="font-weight: 600">Backend &amp; Computer Vision Engineer · Alfabeta</div><div style="color: var(--ink3)">Remote, since January 2024</div></div>
+<div class="item"><div class="eyebrow">Before</div><div style="font-weight: 600">B.S., Computer Science · University of Muhammadiyah Malang</div><div style="color: var(--ink3)">2020 – 2024 · GPA 3.91 / 4.00</div></div>
+<div class="item"><div class="eyebrow">Languages</div><div>Indonesian, English (TOEFL 571, Duolingo 125), Mandarin (learning)</div></div>
+<div style="display: flex; gap: 10px; margin-top: 8px"><a class="btn" href="https://github.com/ridhaagam">GitHub</a><a class="btn" href="https://linkedin.com/in/ridhaagam">LinkedIn</a></div>
+</div>
+
+<div class="dc-if" data-if="is.research" hidden>
+<span class="eyebrow">Research</span>
+<h2 class="h2">Papers from 2026</h2>
+<div class="item" style="margin-top: 18px">
+<div style="display: flex; gap: 8px; margin-bottom: 6px"><span class="pill p-gold">Best Paper</span><span class="pill p-blue">NCWIA 2026</span></div>
+<div class="fr" style="font-size: 19px; font-weight: 700; line-height: 1.2">UniReflow</div>
+<div style="color: var(--ink2)">One model that segments an image and generates an image from a mask, both in a single step.</div>
+<div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap">
+<span class="met"><b class="fr" style="font-size: 20px">39.2</b><span style="font-size: 12px; color: var(--ink3)">mIoU, COCO-Stuff, 1 step</span></span>
+<span class="met"><b class="fr" style="font-size: 20px">175 ms</b><span style="font-size: 12px; color: var(--ink3)">RTX 4090, from 2,775</span></span>
+<span class="met"><b class="fr" style="font-size: 20px">55.7</b><span style="font-size: 12px; color: var(--ink3)">mIoU, CelebAMask-HQ</span></span>
+</div>
+<a href="blog/unireflow.html" style="display: inline-block; margin-top: 10px; font-weight: 500">Read the write-up</a>
+</div>
+<div class="item">
+<div style="display: flex; gap: 8px; margin-bottom: 6px"><span class="pill p-gold">Honorable Mention</span><span class="pill p-blue">CVGIP 2026</span></div>
+<div class="fr" style="font-size: 19px; font-weight: 700; line-height: 1.2">DuoDiffCount</div>
+<div style="color: var(--ink2)">Crowd counting that fuses frozen Stable Diffusion features with frozen CLIP features. Neither backbone is fine-tuned.</div>
+</div>
+<div class="item">
+<div style="display: flex; gap: 8px; margin-bottom: 6px"><span class="pill p-sage">Accepted</span><span class="pill p-blue">IEEE ICME 2026 Workshops</span></div>
+<div class="fr" style="font-size: 19px; font-weight: 700; line-height: 1.2">CATS-Diff</div>
+<div style="color: var(--ink2)">Cheaper diffusion training by choosing timesteps per channel instead of sampling them uniformly.</div>
+</div>
+</div>
+
+<div class="dc-if" data-if="is.awards" hidden>
+<span class="eyebrow">Awards</span>
+<h2 class="h2">Two paper awards in 2026</h2>
+<div class="item" style="margin-top: 18px">
+<span class="pill p-gold">Best Paper Award · 最佳論文獎</span>
+<div class="fr" style="font-size: 19px; font-weight: 700; line-height: 1.2; margin-top: 8px">UniReflow: Unified One-Step Perception and Generation via Rectified Flow Distillation</div>
+<div class="mono" style="font-size: 12px; color: var(--ink3); margin-top: 4px">NCWIA 2026 · IEEE SMC Tainan Chapter · 10 July 2026</div>
+<table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px">
+<tr><td class="fr" style="padding: 6px 0; font-weight: 700; font-size: 17px">39.2 mIoU</td><td style="color: var(--ink2)">COCO-Stuff in 1 step</td></tr>
+<tr><td class="fr" style="padding: 6px 0; font-weight: 700; font-size: 17px; color: var(--ink3)">38.6 mIoU</td><td style="color: var(--ink3)">SemFlow, 25 steps</td></tr>
+<tr><td class="fr" style="padding: 6px 0; font-weight: 700; font-size: 17px">175 ms</td><td style="color: var(--ink2)">RTX 4090, down from 2,775 ms</td></tr>
+</table>
+</div>
+<div class="item">
+<span class="pill p-gold">Honorable Mention · 佳作論文獎</span>
+<div class="fr" style="font-size: 19px; font-weight: 700; line-height: 1.2; margin-top: 8px">DuoDiffCount: Fusing Frozen Diffusion and CLIP Features for Crowd Counting</div>
+<div class="mono" style="font-size: 12px; color: var(--ink3); margin-top: 4px">CVGIP 2026 · Tainan · 30 Aug – 1 Sep 2026</div>
+</div>
+</div>
+
+<div class="dc-if" data-if="is.experience" hidden>
+<span class="eyebrow">Experience</span>
+<h2 class="h2">From web apps to vision on the edge</h2>
+<div class="item" style="margin-top: 18px"><div class="mono" style="font-size: 12px; color: var(--ink3)">Jan 2024 – now</div><div style="font-weight: 600">Backend &amp; CV Engineer · Alfabeta</div><div style="color: var(--ink2)">Plate-recognition and parking-gate camera systems across Indonesia, including 18+ Intel NUC deployments at airports. People counting at 95%+ accuracy in busy retail; intruder detection with 75% fewer false positives.</div></div>
+<div class="item"><div class="mono" style="font-size: 12px; color: var(--ink3)">Jul 2023 – Jul 2024</div><div style="font-weight: 600">Full-Stack Developer · TOGI</div><div style="color: var(--ink2)">Moved a legacy ERP to ERPNext with 10+ years of records and no data loss. Cut manual reporting time by 90%.</div></div>
+<div class="item"><div class="mono" style="font-size: 12px; color: var(--ink3)">Jan – Jul 2023</div><div style="font-weight: 600">Full-Stack Developer · Platon ID</div><div style="color: var(--ink2)">Laravel 9 customer service platform used by 500+ people a day.</div></div>
+<div class="item"><div class="mono" style="font-size: 12px; color: var(--ink3)">Jul – Dec 2022</div><div style="font-weight: 600">DevOps Intern · GITS Indonesia</div><div style="color: var(--ink2)">BigQuery billing automation, with 70% less manual work.</div></div>
+<div class="item"><div class="mono" style="font-size: 12px; color: var(--ink3)">Jul – Dec 2022</div><div style="font-weight: 600">Laravel Developer Intern · Solusi Tiga Digital</div><div style="color: var(--ink2)">Job board web app, built with an 8-person Scrum team.</div></div>
+</div>
+
+<div class="dc-if" data-if="is.projects" hidden>
+<span class="eyebrow">Projects</span>
+<h2 class="h2">Things I've built</h2>
+<div class="item" style="margin-top: 18px"><div style="font-weight: 600">Multi-site edge camera network</div><div style="color: var(--ink2)">Capture loops, detection, ETL into MySQL and monitoring per site.</div><div class="mono" style="font-size: 12px; color: var(--ink3)">Docker · Node.js · MySQL · Redis · Grafana · Headscale</div></div>
+<div class="item"><div style="font-weight: 600">People counting and re-identification</div><div style="color: var(--ink2)">Counting, face re-ID, dwell time and demographics for retail spaces.</div><div class="mono" style="font-size: 12px; color: var(--ink3)">Python · PyTorch · OpenCV · ONNX</div></div>
+<div class="item"><div style="font-weight: 600">Judicial Commission web scraper</div><div style="color: var(--ink2)">Scrapes and cleans court data, runs a regression, serves results to a web app.</div><div class="mono" style="font-size: 12px; color: var(--ink3)">Python · FastAPI · Next.js</div></div>
+<div class="item"><div style="font-weight: 600">Kemenaker TalentHub</div><div style="color: var(--ink2)">Backend work on Indonesia's Ministry of Manpower talent platform.</div><div class="mono" style="font-size: 12px; color: var(--ink3)">Go · TypeScript</div></div>
+<div class="item"><div style="font-weight: 600">Virtual Customer Service</div><div style="color: var(--ink2)">Company platform with APIs for products, customer calls and rankings.</div><div class="mono" style="font-size: 12px; color: var(--ink3)">Laravel 9 · PHP · MySQL</div></div>
+<div class="item"><div style="font-weight: 600">GIS for Bidikmisi</div><div style="color: var(--ink2)">A map of where scholarship students live, built for the university.</div><div class="mono" style="font-size: 12px; color: var(--ink3)">CodeIgniter 3 · Bootstrap · JavaScript</div></div>
+</div>
+
+
+<div class="dc-if" data-if="is.contact" hidden>
+<span class="eyebrow">Contact</span>
+<h2 class="h2">Let's work together</h2>
+<p style="margin: 14px 0 0; color: var(--ink2)">Open to research collaborations, internships, and backend or ML engineering roles.</p>
+<div style="margin-top: 20px; padding: 16px; border-radius: 14px; background: #F7E3B2; transform: rotate(-1deg)">
+<div class="hand" style="font-size: 30px; line-height: 1.1">email me at</div>
+<div class="mono" style="font-size: 16px; user-select: all">muhridhaagam@gmail.com</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; align-items: center">
+<button class="btn" type="button" data-on-click="copyEmail">Copy email</button>
+<a class="btn dark" href="mailto:muhridhaagam@gmail.com">Send an email</a>
+<span role="status" style="font-size: 13px; color: var(--ink3)"><span data-text="emailMsg"></span></span>
+</div>
+<div style="display: flex; gap: 10px; margin-top: 12px"><a class="btn" href="https://github.com/ridhaagam">GitHub</a><a class="btn" href="https://linkedin.com/in/ridhaagam">LinkedIn</a></div>
+</div>
+
+</div>
+</aside>
+</div>
+
+
+<!-- blog pop-up -->
+<div class="dc-if" data-if="blogOpen" hidden>
+<div class="mwrap">
+<section class="toon modal" role="dialog" aria-label="Blog">
+<span class="mtape" style="left: 70px; transform: rotate(-4deg)"></span><span class="mtape" style="right: 70px; transform: rotate(3deg)"></span>
+<header class="mhead"><div style="display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap"><span style="font: 700 40px 'Fredoka', sans-serif">the blog</span><span class="hand mtag" style="font-size: 26px; color: var(--ink3)">notes from the lab and the field</span></div><div style="display: flex; gap: 10px"><a class="btn" href="blog/index.html">Open the blog page</a><button class="btn ico" type="button" data-on-click="goHome" aria-label="Close the blog"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div></header>
+<div class="dc-if" data-if="listMode" hidden><div class="mlistwrap"><div class="mlist"><button class="toon pcard" type="button" data-on-click="op.p0" style="transform: rotate(-1.2deg)"><span class="cover" style="height: 230px"><svg viewBox="0 0 400 220" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect x="0" y="0" width="400" height="220" fill="#F7E3B2"></rect><rect class="lt" x="40" y="58" width="20" height="20" fill="#2B2A33"></rect><rect class="lt" x="60" y="58" width="20" height="20" fill="#2B2A33"></rect><rect class="lt" x="80" y="58" width="20" height="20" fill="#F2A992"></rect><rect class="lt" x="100" y="58" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="120" y="58" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="40" y="78" width="20" height="20" fill="#3D55B8"></rect><rect class="lt" x="60" y="78" width="20" height="20" fill="#9DBB8C"></rect><rect class="lt" x="80" y="78" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="100" y="78" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="120" y="78" width="20" height="20" fill="#9DBB8C"></rect><rect class="lt" x="40" y="98" width="20" height="20" fill="#2B2A33"></rect><rect class="lt" x="60" y="98" width="20" height="20" fill="#F2A992"></rect><rect class="lt" x="80" y="98" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="100" y="98" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="120" y="98" width="20" height="20" fill="#F2A992"></rect><rect class="lt" x="40" y="118" width="20" height="20" fill="#9DBB8C"></rect><rect class="lt" x="60" y="118" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="80" y="118" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="100" y="118" width="20" height="20" fill="#9DBB8C"></rect><rect class="lt" x="120" y="118" width="20" height="20" fill="#F2C25B"></rect><rect class="lt" x="40" y="138" width="20" height="20" fill="#F2A992"></rect><rect class="lt" x="60" y="138" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="80" y="138" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="100" y="138" width="20" height="20" fill="#F2A992"></rect><rect class="lt" x="120" y="138" width="20" height="20" fill="#3D55B8"></rect><text class="hnd" x="42" y="48">noise</text><path class="ln" d="M156 118 C180 92, 204 142, 228 112"></path><path class="ln" d="M216 104 L230 112 L220 126"></path><text class="hnd" x="160" y="84">1 step!</text><rect class="lf" x="246" y="44" width="124" height="124" rx="12" fill="#BFE0F2"></rect><circle class="lf" cx="340" cy="78" r="15" fill="#F2C25B"></circle><path class="lf" d="M246 150 L282 104 L306 130 L328 108 L370 152 L370 156 Q370 168 358 168 L258 168 Q246 168 246 156 Z" fill="#9DBB8C"></path><rect class="lf" x="312" y="130" width="72" height="72" rx="10" fill="#FFF9EF"></rect><rect x="319" y="137" width="58" height="26" fill="#3D55B8"></rect><path d="M319 180 L336 158 L350 170 L360 160 L377 180 L377 195 L319 195 Z" fill="#E0574B"></path><circle cx="366" cy="146" r="6" fill="#F2C25B"></circle><text class="hnd" x="300" y="216" style="font-size:18px">mask</text><polygon class="lt" points="22.0,14.0 25.2,21.6 33.4,22.3 27.1,27.7 29.1,35.7 22.0,31.4 14.9,35.7 16.9,27.7 10.6,22.3 18.8,21.6" fill="#FFFFFF"></polygon><polygon class="lt" points="385.0,16.0 387.6,22.4 394.5,22.9 389.3,27.4 390.9,34.1 385.0,30.5 379.1,34.1 380.7,27.4 375.5,22.9 382.4,22.4" fill="#F2A992"></polygon></svg></span><span style="display: flex; flex-direction: column; gap: 10px; padding: 18px 20px 20px; flex-grow: 1"><span style="display: flex; gap: 8px; flex-wrap: wrap"><span class="stk s-blue">Research</span><span class="stk s-white">15 July 2026</span></span><span style="font: 700 21px/1.2 'Fredoka', sans-serif">One step instead of twenty-five: notes on UniReflow</span><span style="font-size: 15px; line-height: 1.55; color: #55505C">How one reflow pass and distillation got COCO-Stuff segmentation to 39.2 mIoU in a single step.</span><span style="margin-top: auto; display: flex; justify-content: space-between; align-items: baseline"><span style="font: 500 13px 'IBM Plex Mono', monospace; color: #6E6873">4 min read</span><span style="font: 700 22px 'Caveat', cursive; color: #E0574B">read it →</span></span></span></button><button class="toon pcard" type="button" data-on-click="op.p1" style="transform: rotate(0.9deg)"><span class="cover" style="height: 230px"><svg viewBox="0 0 400 220" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect x="0" y="0" width="400" height="220" fill="#DCEBD3"></rect><ellipse class="lf" cx="92" cy="46" rx="40" ry="16" fill="#FFFFFF"></ellipse><ellipse class="lf" cx="312" cy="60" rx="34" ry="13" fill="#FFFFFF"></ellipse><path class="lf" d="M196 58 L262 48 L290 28 L302 30 L290 50 L336 46 Q346 46 340 54 L292 62 L276 84 L264 84 L272 64 L222 70 L210 80 L200 80 L206 66 Z" fill="#FFF9EF"></path><path class="ln" d="M0 184 L400 184"></path><rect class="lf" x="46" y="138" width="118" height="46" rx="8" fill="#3B4050"></rect><circle cx="146" cy="160" r="6" fill="#7BE08A"></circle><path class="ln" d="M62 152 L112 152 M62 166 L96 166" style="stroke:#9AA3B5"></path><path class="ln" d="M268 184 L268 104"></path><rect class="lf" x="236" y="80" width="72" height="40" rx="8" fill="#F2A992"></rect><circle class="lf" cx="258" cy="100" r="11" fill="#2B2A33"></circle><circle cx="296" cy="90" r="4" fill="#E0574B"></circle><path class="ln" d="M318 88 Q330 100 318 112 M328 80 Q346 100 328 120"></path><text class="hnd" x="178" y="214">18+ airport sites</text><polygon class="lt" points="370.0,139.0 372.9,146.0 380.5,146.6 374.7,151.5 376.5,158.9 370.0,154.9 363.5,158.9 365.3,151.5 359.5,146.6 367.1,146.0" fill="#F7E3B2"></polygon></svg></span><span style="display: flex; flex-direction: column; gap: 10px; padding: 18px 20px 20px; flex-grow: 1"><span style="display: flex; gap: 8px; flex-wrap: wrap"><span class="stk s-sage">Engineering</span><span class="stk s-white">20 August 2026</span></span><span style="font: 700 21px/1.2 'Fredoka', sans-serif">Keeping computer vision running at 18+ airport sites</span><span style="font-size: 15px; line-height: 1.55; color: #55505C">Plate recognition and parking-gate cameras on Intel NUC boxes across Indonesia, and the network and monitoring that keep them alive.</span><span style="margin-top: auto; display: flex; justify-content: space-between; align-items: baseline"><span style="font: 500 13px 'IBM Plex Mono', monospace; color: #6E6873">5 min read</span><span style="font: 700 22px 'Caveat', cursive; color: #E0574B">read it →</span></span></span></button><button class="toon pcard" type="button" data-on-click="op.p2" style="transform: rotate(-0.6deg)"><span class="cover" style="height: 230px"><svg viewBox="0 0 400 220" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect x="0" y="0" width="400" height="220" fill="#F9D3C4"></rect><rect class="lf" x="32" y="36" width="100" height="62" rx="12" fill="#C7D2F5"></rect><text class="lbl" x="70" y="73">SD</text><rect class="lf" x="32" y="120" width="100" height="62" rx="12" fill="#CFE3C3"></rect><text class="lbl" x="60" y="157">CLIP</text><rect class="lt" x="112" y="26" width="24" height="18" rx="4" fill="#F2C25B"></rect><path class="ln" d="M117 26 L117 20 Q124 12 131 20 L131 26" style="stroke-width:2.5"></path><rect class="lt" x="112" y="110" width="24" height="18" rx="4" fill="#F2C25B"></rect><path class="ln" d="M117 110 L117 104 Q124 96 131 104 L131 110" style="stroke-width:2.5"></path><path class="ln" d="M146 110 C168 110, 172 110, 192 110"></path><path class="ln" d="M182 100 L194 110 L182 120"></path><circle class="lt" cx="222" cy="96" r="11" fill="#FFF9EF"></circle><path class="lt" d="M211 122 q11 -16 22 0 Z" fill="#3D55B8"></path><circle class="lt" cx="256" cy="84" r="11" fill="#F2C25B"></circle><path class="lt" d="M245 110 q11 -16 22 0 Z" fill="#E0574B"></path><circle class="lt" cx="290" cy="98" r="11" fill="#FFF9EF"></circle><path class="lt" d="M279 124 q11 -16 22 0 Z" fill="#9DBB8C"></path><circle class="lt" cx="324" cy="86" r="11" fill="#FFF9EF"></circle><path class="lt" d="M313 112 q11 -16 22 0 Z" fill="#3D55B8"></path><circle class="lt" cx="358" cy="100" r="11" fill="#F2C25B"></circle><path class="lt" d="M347 126 q11 -16 22 0 Z" fill="#9DBB8C"></path><circle class="lt" cx="236" cy="146" r="11" fill="#FFF9EF"></circle><path class="lt" d="M225 172 q11 -16 22 0 Z" fill="#E0574B"></path><circle class="lt" cx="272" cy="138" r="11" fill="#FFF9EF"></circle><path class="lt" d="M261 164 q11 -16 22 0 Z" fill="#3D55B8"></path><circle class="lt" cx="306" cy="150" r="11" fill="#F2C25B"></circle><path class="lt" d="M295 176 q11 -16 22 0 Z" fill="#9DBB8C"></path><circle class="lt" cx="342" cy="140" r="11" fill="#FFF9EF"></circle><path class="lt" d="M331 166 q11 -16 22 0 Z" fill="#E0574B"></path><rect class="lf" x="292" y="22" width="92" height="40" rx="18" fill="#FFFFFF"></rect><text class="hnd" x="304" y="50">count?</text></svg></span><span style="display: flex; flex-direction: column; gap: 10px; padding: 18px 20px 20px; flex-grow: 1"><span style="display: flex; gap: 8px; flex-wrap: wrap"><span class="stk s-blue">Research</span><span class="stk s-white">8 September 2026</span></span><span style="font: 700 21px/1.2 'Fredoka', sans-serif">Two frozen backbones for crowd counting</span><span style="font-size: 15px; line-height: 1.55; color: #55505C">DuoDiffCount fuses frozen Stable Diffusion and CLIP features to count dense crowds, with no fine-tuning.</span><span style="margin-top: auto; display: flex; justify-content: space-between; align-items: baseline"><span style="font: 500 13px 'IBM Plex Mono', monospace; color: #6E6873">4 min read</span><span style="font: 700 22px 'Caveat', cursive; color: #E0574B">read it →</span></span></span></button></div><div class="hand" style="font-size: 24px; color: var(--ink3); text-align: center">pick a post to read it here</div></div></div>
+<div class="dc-if" data-if="postMode" hidden><div class="dc-if" data-if="cur.is0" hidden><div class="mpost"><div class="mside"><button class="btn" type="button" data-on-click="backToList"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>All posts</button><div style="display: flex; flex-wrap: wrap; gap: 6px"><span class="stk s-blue">Research</span><span class="stk s-butter">Diffusion</span><span class="stk s-sage">Segmentation</span></div><div style="font: 14px/1.6 'Nunito', sans-serif; color: var(--ink2)">by Muhammad Ridha Agam<br><time>15 July 2026</time> · 4 min read</div><div class="bubble" style="margin-top: 6px; transform: rotate(-2deg)">one step, not twenty-five!</div><a class="btn" href="blog/unireflow.html" style="margin-top: 8px">Open as a page</a><button class="toon" type="button" data-on-click="nextPost" style="margin-top: auto; width: 100%; padding: 14px 16px; text-align: left; cursor: pointer; box-shadow: 4px 4px 0 #2B2A33; font-family: 'Nunito', sans-serif; color: #2B2A33"><span class="hand" style="display: block; font-size: 22px; color: #E0574B">next post →</span><span style="font: 600 15px/1.3 'Fredoka', sans-serif">Keeping computer vision running at 18+ airport sites</span></button></div><div class="art mart"><div class="toon" style="height: 210px; overflow: hidden; box-shadow: 4px 4px 0 #2B2A33; background: #F7E3B2"><svg viewBox="0 0 400 220" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><rect x="0" y="0" width="400" height="220" fill="#F7E3B2"></rect><rect class="lt" x="40" y="58" width="20" height="20" fill="#2B2A33"></rect><rect class="lt" x="60" y="58" width="20" height="20" fill="#2B2A33"></rect><rect class="lt" x="80" y="58" width="20" height="20" fill="#F2A992"></rect><rect class="lt" x="100" y="58" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="120" y="58" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="40" y="78" width="20" height="20" fill="#3D55B8"></rect><rect class="lt" x="60" y="78" width="20" height="20" fill="#9DBB8C"></rect><rect class="lt" x="80" y="78" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="100" y="78" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="120" y="78" width="20" height="20" fill="#9DBB8C"></rect><rect class="lt" x="40" y="98" width="20" height="20" fill="#2B2A33"></rect><rect class="lt" x="60" y="98" width="20" height="20" fill="#F2A992"></rect><rect class="lt" x="80" y="98" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="100" y="98" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="120" y="98" width="20" height="20" fill="#F2A992"></rect><rect class="lt" x="40" y="118" width="20" height="20" fill="#9DBB8C"></rect><rect class="lt" x="60" y="118" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="80" y="118" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="100" y="118" width="20" height="20" fill="#9DBB8C"></rect><rect class="lt" x="120" y="118" width="20" height="20" fill="#F2C25B"></rect><rect class="lt" x="40" y="138" width="20" height="20" fill="#F2A992"></rect><rect class="lt" x="60" y="138" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="80" y="138" width="20" height="20" fill="#FFF9EF"></rect><rect class="lt" x="100" y="138" width="20" height="20" fill="#F2A992"></rect><rect class="lt" x="120" y="138" width="20" height="20" fill="#3D55B8"></rect><text class="hnd" x="42" y="48">noise</text><path class="ln" d="M156 118 C180 92, 204 142, 228 112"></path><path class="ln" d="M216 104 L230 112 L220 126"></path><text class="hnd" x="160" y="84">1 step!</text><rect class="lf" x="246" y="44" width="124" height="124" rx="12" fill="#BFE0F2"></rect><circle class="lf" cx="340" cy="78" r="15" fill="#F2C25B"></circle><path class="lf" d="M246 150 L282 104 L306 130 L328 108 L370 152 L370 156 Q370 168 358 168 L258 168 Q246 168 246 156 Z" fill="#9DBB8C"></path><rect class="lf" x="312" y="130" width="72" height="72" rx="10" fill="#FFF9EF"></rect><rect x="319" y="137" width="58" height="26" fill="#3D55B8"></rect><path d="M319 180 L336 158 L350 170 L360 160 L377 180 L377 195 L319 195 Z" fill="#E0574B"></path><circle cx="366" cy="146" r="6" fill="#F2C25B"></circle><text class="hnd" x="300" y="216" style="font-size:18px">mask</text><polygon class="lt" points="22.0,14.0 25.2,21.6 33.4,22.3 27.1,27.7 29.1,35.7 22.0,31.4 14.9,35.7 16.9,27.7 10.6,22.3 18.8,21.6" fill="#FFFFFF"></polygon><polygon class="lt" points="385.0,16.0 387.6,22.4 394.5,22.9 389.3,27.4 390.9,34.1 385.0,30.5 379.1,34.1 380.7,27.4 375.5,22.9 382.4,22.4" fill="#F2A992"></polygon></svg></div><h1 style="margin: 22px 0 6px; font: 700 36px/1.1 'Fredoka', sans-serif">One step instead of twenty-five: notes on UniReflow</h1><div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 18px"><span class="stk s-white">Published <time style="margin-left: 4px">15 July 2026</time></span><span class="stk s-white">4 min read</span></div><p class="drop lead">UniReflow is one model that does two jobs: it segments an image, and it generates an image from a segmentation mask. Both happen in a single step. The paper won the Best Paper Award at NCWIA 2026.</p><h2>The idea in one picture</h2><div class="pipe"><div class="step" style="background: #C7D2F5">Teacher<span style="font: 400 13px 'Nunito', sans-serif; color: #45404D">flow matching on frozen Stable Diffusion 1.5 + LoRA</span></div><svg viewBox="0 0 30 24" width="30" height="24" aria-hidden="true" style="align-self: center; flex-shrink: 0"><path class="ln" d="M2 12 L26 12 M18 5 L26 12 L18 19"></path></svg><div class="step" style="background: #F7E3B2">One reflow pass<span style="font: 400 13px 'Nunito', sans-serif; color: #45404D">straightens the trajectories</span></div><svg viewBox="0 0 30 24" width="30" height="24" aria-hidden="true" style="align-self: center; flex-shrink: 0"><path class="ln" d="M2 12 L26 12 M18 5 L26 12 L18 19"></path></svg><div class="step" style="background: #CFE3C3">One-step student<span style="font: 400 13px 'Nunito', sans-serif; color: #45404D">a direction embedding picks image → mask or mask → image</span></div></div><h2>How it works</h2><p>A flow-matching teacher is trained on frozen Stable Diffusion 1.5 with LoRA adapters. One reflow pass straightens its trajectories, and the result is distilled into a student that runs in a single step. A direction embedding tells the student whether to go from image to mask (perception) or from mask to image (generation).</p><h2>The results</h2><div class="stats"><div class="stat" style="background: #F7E3B2; transform: rotate(-1.5deg)"><span style="font: 700 34px 'Fredoka', sans-serif">39.2</span><span style="font: 14px/1.35 'Nunito', sans-serif">mIoU on COCO-Stuff in one step (SemFlow: 38.6 in 25)</span></div><div class="stat" style="background: #F7B5A8; transform: rotate(1deg)"><span style="font: 700 34px 'Fredoka', sans-serif">175 ms</span><span style="font: 14px/1.35 'Nunito', sans-serif">on an RTX 4090, down from 2,775 ms</span></div><div class="stat" style="background: #CFE3C3; transform: rotate(-0.5deg)"><span style="font: 700 34px 'Fredoka', sans-serif">55.7</span><span style="font: 14px/1.35 'Nunito', sans-serif">mIoU on CelebAMask-HQ face parsing</span></div></div><h2>Why one step matters</h2><div class="todo">[Write this section: why speed matters for your work on edge devices, and what the 2,775 → 175 ms drop makes possible.]</div><h2>What I learned</h2><div class="todo">[Write this section in your own words.]</div><div class="toon" style="margin-top: 30px; padding: 18px 20px; background: #FFFFFF; box-shadow: 4px 4px 0 #2B2A33"><div style="font: 700 22px 'Caveat', cursive">the paper</div><div style="font: 600 15px/1.4 'Fredoka', sans-serif; margin-top: 4px">UniReflow: Unified One-Step Perception and Generation via Rectified Flow Distillation</div><div style="font: 14px/1.5 'Nunito', sans-serif; color: #55505C">M. R. Agam, N. Setyawan, C.-C. Sun, H.-K. Su, J.-W. Hsieh · NCWIA 2026 · Best Paper Award</div></div><div class="toon author"><div class="avatar">MRA</div><div><div style="font: 700 22px 'Caveat', cursive; line-height: 1">written by</div><div style="font: 700 19px 'Fredoka', sans-serif">Muhammad Ridha Agam</div><div style="font: 14px/1.5 'Nunito', sans-serif; color: #55505C">M.S. student in Electrical Engineering at National Formosa University, and backend &amp; computer vision engineer at Alfabeta.</div></div></div></div></div></div><div class="dc-if" data-if="cur.is1" hidden><div class="mpost"><div class="mside"><button class="btn" type="button" data-on-click="backToList"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>All posts</button><div style="display: flex; flex-wrap: wrap; gap: 6px"><span class="stk s-sage">Engineering</span><span class="stk s-butter">Edge</span><span class="stk s-blue">DevOps</span></div><div style="font: 14px/1.6 'Nunito', sans-serif; color: var(--ink2)">by Muhammad Ridha Agam<br><time>20 August 2026</time> · 5 min read</div><div class="bubble" style="margin-top: 6px; transform: rotate(-2deg)">18+ airports, one private network</div><a class="btn" href="blog/edge-airports.html" style="margin-top: 8px">Open as a page</a><button class="toon" type="button" data-on-click="nextPost" style="margin-top: auto; width: 100%; padding: 14px 16px; text-align: left; cursor: pointer; box-shadow: 4px 4px 0 #2B2A33; font-family: 'Nunito', sans-serif; color: #2B2A33"><span class="hand" style="display: block; font-size: 22px; color: #E0574B">next post →</span><span style="font: 600 15px/1.3 'Fredoka', sans-serif">Two frozen backbones for crowd counting</span></button></div><div class="art mart"><div class="toon" style="height: 210px; overflow: hidden; box-shadow: 4px 4px 0 #2B2A33; background: #DCEBD3"><svg viewBox="0 0 400 220" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><rect x="0" y="0" width="400" height="220" fill="#DCEBD3"></rect><ellipse class="lf" cx="92" cy="46" rx="40" ry="16" fill="#FFFFFF"></ellipse><ellipse class="lf" cx="312" cy="60" rx="34" ry="13" fill="#FFFFFF"></ellipse><path class="lf" d="M196 58 L262 48 L290 28 L302 30 L290 50 L336 46 Q346 46 340 54 L292 62 L276 84 L264 84 L272 64 L222 70 L210 80 L200 80 L206 66 Z" fill="#FFF9EF"></path><path class="ln" d="M0 184 L400 184"></path><rect class="lf" x="46" y="138" width="118" height="46" rx="8" fill="#3B4050"></rect><circle cx="146" cy="160" r="6" fill="#7BE08A"></circle><path class="ln" d="M62 152 L112 152 M62 166 L96 166" style="stroke:#9AA3B5"></path><path class="ln" d="M268 184 L268 104"></path><rect class="lf" x="236" y="80" width="72" height="40" rx="8" fill="#F2A992"></rect><circle class="lf" cx="258" cy="100" r="11" fill="#2B2A33"></circle><circle cx="296" cy="90" r="4" fill="#E0574B"></circle><path class="ln" d="M318 88 Q330 100 318 112 M328 80 Q346 100 328 120"></path><text class="hnd" x="178" y="214">18+ airport sites</text><polygon class="lt" points="370.0,139.0 372.9,146.0 380.5,146.6 374.7,151.5 376.5,158.9 370.0,154.9 363.5,158.9 365.3,151.5 359.5,146.6 367.1,146.0" fill="#F7E3B2"></polygon></svg></div><h1 style="margin: 22px 0 6px; font: 700 36px/1.1 'Fredoka', sans-serif">Keeping computer vision running at 18+ airport sites</h1><div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 18px"><span class="stk s-white">Published <time style="margin-left: 4px">20 August 2026</time></span><span class="stk s-white">5 min read</span></div><p class="drop lead">Since January 2024 I have been running the license plate recognition and parking-gate camera systems that Alfabeta operates across sites in Indonesia, including more than 18 Intel NUC deployments at airports. This post is about the less glamorous half of computer vision: keeping it running.</p><h2>The setup</h2><p>Each site has cameras feeding small Intel NUC machines. The detection tools run in Docker on those boxes, and ETL jobs move the results into MySQL, with Redis alongside. The same kind of stack also runs people counting in busy retail spaces and intruder detection.</p><div class="stats"><div class="stat" style="background: #CFE3C3; transform: rotate(-1.5deg)"><span style="font: 700 34px 'Fredoka', sans-serif">18+</span><span style="font: 14px/1.35 'Nunito', sans-serif">Intel NUC deployments at airports</span></div><div class="stat" style="background: #F7E3B2; transform: rotate(1deg)"><span style="font: 700 34px 'Fredoka', sans-serif">95%+</span><span style="font: 14px/1.35 'Nunito', sans-serif">people-counting accuracy in busy retail spaces</span></div><div class="stat" style="background: #F7B5A8; transform: rotate(-0.5deg)"><span style="font: 700 34px 'Fredoka', sans-serif">75%</span><span style="font: 14px/1.35 'Nunito', sans-serif">fewer false positives in intruder detection</span></div></div><h2>Reaching boxes you can't touch</h2><p>The machines sit on different site networks, far from each other. To reach them, I set up a self-hosted Tailscale/Headscale network that puts every edge device on one private network.</p><h2>Watching everything</h2><p>Grafana and Prometheus watch the Docker hosts and the pipelines behind each site, so problems show up on a dashboard before they show up in a complaint.</p><h2>What I'd tell my past self</h2><div class="todo">[Write this section in your own words: the lessons from running vision systems in production.]</div><div class="toon author"><div class="avatar">MRA</div><div><div style="font: 700 22px 'Caveat', cursive; line-height: 1">written by</div><div style="font: 700 19px 'Fredoka', sans-serif">Muhammad Ridha Agam</div><div style="font: 14px/1.5 'Nunito', sans-serif; color: #55505C">M.S. student in Electrical Engineering at National Formosa University, and backend &amp; computer vision engineer at Alfabeta.</div></div></div></div></div></div><div class="dc-if" data-if="cur.is2" hidden><div class="mpost"><div class="mside"><button class="btn" type="button" data-on-click="backToList"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>All posts</button><div style="display: flex; flex-wrap: wrap; gap: 6px"><span class="stk s-blue">Research</span><span class="stk s-red">Counting</span><span class="stk s-butter">Diffusion</span></div><div style="font: 14px/1.6 'Nunito', sans-serif; color: var(--ink2)">by Muhammad Ridha Agam<br><time>8 September 2026</time> · 4 min read</div><div class="bubble" style="margin-top: 6px; transform: rotate(-2deg)">no fine-tuning needed!</div><a class="btn" href="blog/duodiffcount.html" style="margin-top: 8px">Open as a page</a><button class="toon" type="button" data-on-click="nextPost" style="margin-top: auto; width: 100%; padding: 14px 16px; text-align: left; cursor: pointer; box-shadow: 4px 4px 0 #2B2A33; font-family: 'Nunito', sans-serif; color: #2B2A33"><span class="hand" style="display: block; font-size: 22px; color: #E0574B">next post →</span><span style="font: 600 15px/1.3 'Fredoka', sans-serif">One step instead of twenty-five: notes on UniReflow</span></button></div><div class="art mart"><div class="toon" style="height: 210px; overflow: hidden; box-shadow: 4px 4px 0 #2B2A33; background: #F9D3C4"><svg viewBox="0 0 400 220" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><rect x="0" y="0" width="400" height="220" fill="#F9D3C4"></rect><rect class="lf" x="32" y="36" width="100" height="62" rx="12" fill="#C7D2F5"></rect><text class="lbl" x="70" y="73">SD</text><rect class="lf" x="32" y="120" width="100" height="62" rx="12" fill="#CFE3C3"></rect><text class="lbl" x="60" y="157">CLIP</text><rect class="lt" x="112" y="26" width="24" height="18" rx="4" fill="#F2C25B"></rect><path class="ln" d="M117 26 L117 20 Q124 12 131 20 L131 26" style="stroke-width:2.5"></path><rect class="lt" x="112" y="110" width="24" height="18" rx="4" fill="#F2C25B"></rect><path class="ln" d="M117 110 L117 104 Q124 96 131 104 L131 110" style="stroke-width:2.5"></path><path class="ln" d="M146 110 C168 110, 172 110, 192 110"></path><path class="ln" d="M182 100 L194 110 L182 120"></path><circle class="lt" cx="222" cy="96" r="11" fill="#FFF9EF"></circle><path class="lt" d="M211 122 q11 -16 22 0 Z" fill="#3D55B8"></path><circle class="lt" cx="256" cy="84" r="11" fill="#F2C25B"></circle><path class="lt" d="M245 110 q11 -16 22 0 Z" fill="#E0574B"></path><circle class="lt" cx="290" cy="98" r="11" fill="#FFF9EF"></circle><path class="lt" d="M279 124 q11 -16 22 0 Z" fill="#9DBB8C"></path><circle class="lt" cx="324" cy="86" r="11" fill="#FFF9EF"></circle><path class="lt" d="M313 112 q11 -16 22 0 Z" fill="#3D55B8"></path><circle class="lt" cx="358" cy="100" r="11" fill="#F2C25B"></circle><path class="lt" d="M347 126 q11 -16 22 0 Z" fill="#9DBB8C"></path><circle class="lt" cx="236" cy="146" r="11" fill="#FFF9EF"></circle><path class="lt" d="M225 172 q11 -16 22 0 Z" fill="#E0574B"></path><circle class="lt" cx="272" cy="138" r="11" fill="#FFF9EF"></circle><path class="lt" d="M261 164 q11 -16 22 0 Z" fill="#3D55B8"></path><circle class="lt" cx="306" cy="150" r="11" fill="#F2C25B"></circle><path class="lt" d="M295 176 q11 -16 22 0 Z" fill="#9DBB8C"></path><circle class="lt" cx="342" cy="140" r="11" fill="#FFF9EF"></circle><path class="lt" d="M331 166 q11 -16 22 0 Z" fill="#E0574B"></path><rect class="lf" x="292" y="22" width="92" height="40" rx="18" fill="#FFFFFF"></rect><text class="hnd" x="304" y="50">count?</text></svg></div><h1 style="margin: 22px 0 6px; font: 700 36px/1.1 'Fredoka', sans-serif">Two frozen backbones for crowd counting</h1><div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 18px"><span class="stk s-white">Published <time style="margin-left: 4px">8 September 2026</time></span><span class="stk s-white">4 min read</span></div><p class="drop lead">DuoDiffCount counts people in dense crowds by combining two frozen backbones. It received the Honorable Mention Paper Award (佳作論文獎) at CVGIP 2026 in Tainan.</p><h2>The idea in one picture</h2><div class="pipe"><div class="step" style="background: #C7D2F5">Stable Diffusion<span style="font: 400 13px 'Nunito', sans-serif; color: #45404D">frozen · fine spatial detail</span></div><svg viewBox="0 0 30 24" width="30" height="24" aria-hidden="true" style="align-self: center; flex-shrink: 0"><path class="ln" d="M15 4 L15 20 M7 12 L23 12"></path></svg><div class="step" style="background: #CFE3C3">CLIP<span style="font: 400 13px 'Nunito', sans-serif; color: #45404D">frozen · semantic context</span></div><svg viewBox="0 0 30 24" width="30" height="24" aria-hidden="true" style="align-self: center; flex-shrink: 0"><path class="ln" d="M2 12 L26 12 M18 5 L26 12 L18 19"></path></svg><div class="step" style="background: #F7E3B2">Crowd count<span style="font: 400 13px 'Nunito', sans-serif; color: #45404D">the two feature sets, fused</span></div></div><h2>Two backbones, both frozen</h2><p>Stable Diffusion features hold fine spatial detail, and CLIP features carry semantic context. DuoDiffCount fuses the two to count people in dense crowds. Neither backbone is fine-tuned.</p><h2>Why keep them frozen?</h2><div class="todo">[Write this section: why you chose to keep both backbones frozen.]</div><h2>Results</h2><div class="todo">[Add the benchmark numbers you want to share, for example MAE and MSE on the crowd-counting datasets you used.]</div><div class="toon" style="margin-top: 30px; padding: 18px 20px; background: #FFFFFF; box-shadow: 4px 4px 0 #2B2A33"><div style="font: 700 22px 'Caveat', cursive">the paper</div><div style="font: 600 15px/1.4 'Fredoka', sans-serif; margin-top: 4px">DuoDiffCount: Fusing Frozen Diffusion and CLIP Features for Crowd Counting</div><div style="font: 14px/1.5 'Nunito', sans-serif; color: #55505C">M. R. Agam, C.-C. Sun, H.-K. Su, J.-W. Hsieh · CVGIP 2026 · Honorable Mention Paper Award</div></div><div class="toon author"><div class="avatar">MRA</div><div><div style="font: 700 22px 'Caveat', cursive; line-height: 1">written by</div><div style="font: 700 19px 'Fredoka', sans-serif">Muhammad Ridha Agam</div><div style="font: 14px/1.5 'Nunito', sans-serif; color: #55505C">M.S. student in Electrical Engineering at National Formosa University, and backend &amp; computer vision engineer at Alfabeta.</div></div></div></div></div></div></div>
+</section>
+</div>
+</div>
+
+<div class="dc-if" data-if="loading" hidden>
+<div class="ld"><div style="display: flex; flex-direction: column; align-items: center; gap: 16px"><div class="hand" style="font-size: 34px">tidying up the desk…</div><div class="bar"><span></span></div></div></div>
+</div>
+<div class="dc-if" data-if="noGL" hidden>
+<div class="ld"><div style="text-align: center; max-width: 420px"><div class="hand" style="font-size: 34px">This desk needs WebGL.</div><p>Your browser can't show the 3D view. The blog still works everywhere.</p><a class="btn dark" href="blog/index.html">Read the blog</a></div></div>
+</div>
+
+</div>
+<noscript><p style="position:fixed;inset:auto 0 0 0;padding:16px;background:#FFF9EF;font:16px sans-serif;text-align:center">This portfolio needs JavaScript. <a href="blog/index.html">Read the blog</a>.</p></noscript>
+<script>
+class Component extends DCLogic {
+  initScene() {
+    if (this._api || !this._canvas || !this._wrap) return;
+    if (!window.THREE || !window.DeskScene) { this._wait = setTimeout(() => this.initScene(), 150); return; }
+    const api = window.DeskScene.create({
+      canvas: this._canvas, wrap: this._wrap, tip: this._tip, motion: this._motion,
+      onSelect: (v) => this.setState({ view: v }),
+      onNight: (n) => this.setState({ night: n }),
+      onReady: () => this.setState({ ready: true })
+    });
+    if (!api) { this.setState({ noGL: true }); return; }
+    this._api = api;
+    api.setView(this._view || 'overview');
+  }
+  teardown() {
+    clearTimeout(this._wait);
+    if (this._api) { this._api.dispose(); this._api = null; }
+  }
+  componentDidMount() { this.initScene(); }
+  componentWillUnmount() { this.teardown(); }
+  getRefs() {
+    if (!this._refs) {
+      this._refs = {
+        wrap: (el) => { this._wrap = el; if (el) this.initScene(); },
+        canvas: (el) => { if (!el) this.teardown(); this._canvas = el; if (el) this.initScene(); },
+        tip: (el) => { this._tip = el; }
+      };
+    }
+    return this._refs;
+  }
+  copyEmail() {
+    const ok = () => this.setState({ emailMsg: 'Copied' });
+    const bad = () => this.setState({ emailMsg: 'Copy is blocked here. Select the address.' });
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText('muhridhaagam@gmail.com').then(ok, bad);
+      else bad();
+    } catch (e) { bad(); }
+  }
+  renderVals() {
+    const st = this.state || {};
+    const view = st.view || 'overview';
+    this._view = view;
+    this._motion = this.props.motion ?? true;
+    if (this._api) { this._api.setView(view); this._api.setMotion(this._motion); }
+    const panels = ['about', 'research', 'awards', 'experience', 'projects', 'contact'];
+    const is = {};
+    panels.forEach((p) => { is[p] = view === p; });
+    const labels = { about: 'About', research: 'Research', awards: 'Awards', experience: 'Experience', projects: 'Projects', contact: 'Contact' };
+    const go = (v) => () => this.setState({ view: v });
+    const spots = [['about', 'About'], ['research', 'Papers'], ['awards', 'Awards'], ['experience', 'Experience'], ['projects', 'Projects'], ['blog', 'Blog'], ['contact', 'Contact'], ['screen', 'Look inside']]
+      .map((s) => ({ label: s[1], go: go(s[0]) }));
+    const hasPanel = panels.indexOf(view) >= 0;
+    const post = st.post != null ? st.post : -1;
+    const pi = post >= 0 ? post : 0;
+    const cur = { is0: pi === 0, is1: pi === 1, is2: pi === 2 };
+    const op = { p0: () => this.setState({ post: 0 }), p1: () => this.setState({ post: 1 }), p2: () => this.setState({ post: 2 }) };
+    return {
+      refs: this.getRefs(), is, spots, hasPanel, noPanel: !hasPanel && view !== 'blog',
+      panelLabel: labels[view] || '',
+      atDesk: view === 'overview', away: view !== 'overview', isScreen: view === 'screen',
+      loading: !st.ready && !st.noGL, noGL: !!st.noGL,
+      nightLabel: st.night ? 'Night' : 'Day',
+      switchCls: st.night ? 'switch night' : 'switch', nightStr: st.night ? 'true' : 'false',
+      toggleNight: () => { if (this._api) this._api.toggleNight(); },
+      goHome: () => this.setState({ view: 'overview', post: -1 }),
+      blogOpen: view === 'blog', listMode: post < 0, postMode: post >= 0, cur, op,
+      backToList: () => this.setState({ post: -1 }),
+      nextPost: () => this.setState({ post: (post + 1) % 3 }),
+      copyEmail: () => this.copyEmail(), emailMsg: st.emailMsg || ''
+    };
+  }
+}
+window.__desk = DCLite.mount(document.querySelector('.root'), Component, {"motion": true});
+</script>
+</body>
+</html>
