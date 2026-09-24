@@ -5,17 +5,19 @@ An interactive 3D desk portfolio, plus a blog. It is a plain static site, so it 
 ## What's here
 
 ```
-index.html            the 3D desk (start page)
-blog/index.html       the blog
-blog/unireflow.html   post: One step instead of twenty-five
-blog/edge-airports.html  post: Keeping computer vision running at 18+ airport sites
-blog/duodiffcount.html   post: Two frozen backbones for crowd counting
-assets/three.min.js   three.js r160 (3D engine)
-assets/desk-scene.js  the desk scene: models, camera moves, screen, keyboard
-assets/dc-lite.js     small runtime for the desk page's panels and pop-ups
+index.html                  the 3D desk (start page)
+blog/index.html             the blog: paper write-ups, plus a spot for other notes
+blog/unireflow.html         UniReflow (NCWIA 2026, Best Paper Award)
+blog/duodiffcount.html      DuoDiffCount (CVGIP 2026, Honorable Mention)
+blog/cats-diff.html         CATS-Diff (IEEE ICME 2026 Workshops)
+blog/figures/               figures and results tables taken from each paper
+papers/                     the paper PDFs
+assets/three.min.js         three.js r160 (3D engine)
+assets/desk-scene.js        the desk scene: models, textures, camera moves, screen, keyboard
+assets/dc-lite.js           small runtime for the desk page's panels and pop-ups
 assets/favicon.svg
-404.html              "page not found"
-.nojekyll             tells GitHub Pages to serve the files as they are
+404.html                    "page not found"
+.nojekyll                   tells GitHub Pages to serve the files as they are
 ```
 
 ## Put it online with GitHub Pages
@@ -61,6 +63,6 @@ python3 -m http.server 8000
 
 ## Editing
 
-- **Blog text:** edit the post files in `blog/`. Sections still marked `[Write this section…]` are waiting for your own words.
-- **Dates:** the post dates (15 July, 20 August and 8 September 2026) are set in each post page, on the blog cards in `blog/index.html`, and in the blog pop-up inside `index.html`. Change them in all three places.
-- **Add a post:** copy one of the post files, change its text, then add a card for it to `blog/index.html`.
+- **Paper write-ups:** each post in `blog/` links its PDF from `papers/` and shows figures from `blog/figures/<paper>/`. Click any figure to open it full size.
+- **Dates:** the post dates (15 July, 8 September and 22 September 2026) appear on each post page, on the cards in `blog/index.html`, and in the blog pop-up inside `index.html`.
+- **Adding a note or a new paper:** copy one of the post files, change its text and figures, then add a card for it to `blog/index.html` (papers go under "papers", everything else under "notes").

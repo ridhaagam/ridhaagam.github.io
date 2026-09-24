@@ -351,7 +351,7 @@
     var roleG = group(2.3, 3.55, 0.88, comp);
     sticky(0.95, function (c) {
       c.fillStyle = '#2B2A33'; c.font = '700 54px ' + HAND; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
-      c.fillText('vision', 40, 110); c.fillText('researcher +', 40, 180); c.fillText('backend', 40, 250); c.fillText('engineer', 40, 320);
+      c.fillText('vision', 40, 110); c.fillText('researcher', 40, 180); c.font = '700 44px ' + HAND; c.fillText('efficient', 40, 256); c.fillText('models :)', 40, 318);
     }, roleG, 0, 0, 0, -0.1, '#F9D3C4');
     hot(roleG, 'about', 'Sticky note · about me', { lift: 0.05 });
 
@@ -695,7 +695,7 @@
       for (var y = 90; y < h; y += 40) { x.beginPath(); x.moveTo(20, y); x.lineTo(w - 20, y); x.stroke(); }
       x.fillStyle = '#2B2A33'; x.font = '700 72px ' + HAND; x.textAlign = 'left'; x.textBaseline = 'alphabetic'; x.fillText('blog', 36, 76);
       x.font = '700 34px ' + HAND; x.fillStyle = '#6B6470';
-      x.fillText('notes from the lab', 36, 158); x.fillText('and the field', 36, 198);
+      x.fillText('my papers,', 36, 158); x.fillText('written up', 36, 198);
       x.fillStyle = '#E0574B'; x.fillText('read me →', 36, 318);
     });
     var pageR = makeTex(360, 480, function (x, w, h) {
@@ -703,7 +703,7 @@
       x.strokeStyle = 'rgba(61,85,184,0.22)'; x.lineWidth = 2;
       for (var y = 90; y < h; y += 40) { x.beginPath(); x.moveTo(20, y); x.lineTo(w - 20, y); x.stroke(); }
       x.fillStyle = '#2B2A33'; x.font = '700 32px ' + HAND; x.textAlign = 'left'; x.textBaseline = 'alphabetic';
-      ['- one step instead', '  of twenty-five', '- vision at 18+', '  airport sites', '- two frozen', '  backbones'].forEach(function (s, i) { x.fillText(s, 26, 118 + i * 40); });
+      ['- UniReflow', '  one step, two tasks', '- DuoDiffCount', '  frozen features', '- CATS-Diff', '  faster training'].forEach(function (s, i) { x.fillText(s, 26, 118 + i * 40); });
     });
     var pl = plane(1.08, 1.44, pageL, nbG, -0.56, 0.055, 0); pl.rotation.x = -Math.PI / 2; pl.rotation.y = 0.05;
     var pr = plane(1.08, 1.44, pageR, nbG, 0.56, 0.055, 0); pr.rotation.x = -Math.PI / 2; pr.rotation.y = -0.05;
@@ -713,7 +713,7 @@
     var lead = add(keep(new T.ConeGeometry(0.014, 0.04, 6)), M(0x2B2A33), pencil, 0, 0, 0.75, false); lead.rotation.x = Math.PI / 2;
     var fer = add(keep(new T.CylinderGeometry(0.048, 0.048, 0.08, 12)), M(0xC9CED8, { metalness: 0.8, roughness: 0.3, envMap: envTex }), pencil, 0, 0, -0.64); fer.rotation.x = Math.PI / 2;
     var eras = add(keep(new T.CylinderGeometry(0.046, 0.046, 0.08, 12)), M(0xF2A0A0, { roughness: 0.9 }), pencil, 0, 0, -0.72); eras.rotation.x = Math.PI / 2;
-    hot(nbG, 'blog', 'Notebook · blog', { lift: 0.06 });
+    hot(nbG, 'blog', 'Notebook · paper write-ups', { lift: 0.06 });
 
     // ---------- lamp and plant ----------
     var lampG = group(-6.6, 0, -2.6);
@@ -789,7 +789,7 @@
 
     // ---------- screen content ----------
     var scr = { mode: 'boot', t0: 0, msg: [], buf: '', hoverTile: -1, tiles: [] };
-    var TILE_DEFS = [['Research', 'research', '3 papers'], ['Awards', 'awards', '2 awards'], ['Experience', 'experience', '5 roles'], ['Projects', 'projects', '6 projects'], ['Blog', 'blog', '3 posts'], ['Contact', 'contact', 'say hi']];
+    var TILE_DEFS = [['Research', 'research', '3 papers'], ['Awards', 'awards', '2 awards'], ['Experience', 'experience', '5 roles'], ['Projects', 'projects', '6 projects'], ['Blog', 'blog', '3 papers'], ['Contact', 'contact', 'say hi']];
     for (var tI = 0; tI < 6; tI++) scr.tiles.push({ x: 112 + (tI % 3) * 280, y: 140 + Math.floor(tI / 3) * 195, w: 250, h: 175, label: TILE_DEFS[tI][0], view: TILE_DEFS[tI][1], sub: TILE_DEFS[tI][2] });
     scr.tiles.push({ x: 32, y: 552, w: 280, h: 56, label: '[esc] back to desk', view: 'overview', back: true });
     var diffTarget = null, diffNoise = null, GX = 96, GY = 60;
